@@ -1,4 +1,4 @@
-# ASSIGN(1) — Teleram T-4000 / CP/M 2.2
+# ASSIGN(1) — Teleram T-4000 · CP/M 2.2
 
 Scott Baker, https://www.smbaker.com/
 

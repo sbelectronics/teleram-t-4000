@@ -33,16 +33,16 @@ So the monitor appears:
 The prompt character is **`+`**. Commands are a single letter (lower case is
 folded to upper); an empty line re-prompts and an unrecognised letter prints `?`.
 
-### The monitor console is LOCAL — keyboard + LCD, NOT serial
+### The monitor console is local — keyboard + LCD, not serial
 
-**Correction (verified):** the monitor's console is the machine's **built-in
-keyboard and 80×8 LCD** — it does **not** read or echo commands over the serial
-port. `CONIN` (`$0BB9`) scans the local keyboard matrix (`KBDGET $0B61`: drive a
-column out `$14`, pulse the `$10`-bit5 strobe, read a row nibble from `$14`,
-assemble a 4-nibble scancode → `KBDECODE`); `CONOUT` (`$0B5B` → `$0AC3`) writes
-the **LCD framebuffer at `$FD80`** (640 bytes = 80×8) and touches no serial data
-port. So **you must drive the monitor at the machine itself**, not from a serial
-terminal. (An earlier version of this doc wrongly said it was serial-driveable.)
+The monitor's console is the machine's **built-in keyboard and 80×8 LCD**; it does
+**not** read or echo commands over the serial port (confirmed from the
+disassembly). `CONIN` (`$0BB9`) scans the local keyboard matrix (`KBDGET $0B61`:
+drive a column out `$14`, pulse the `$10`-bit5 strobe, read a row nibble from
+`$14`, assemble a 4-nibble scancode → `KBDECODE`); `CONOUT` (`$0B5B` → `$0AC3`)
+writes the **LCD framebuffer at `$FD80`** (640 bytes = 80×8) and touches no serial
+data port. So you must drive the monitor at the machine itself, not from a serial
+terminal.
 
 The boot ROM *does* initialise the serial UART at reset (`out ($05),$1B` /
 `out ($04),$1D`) — but that's the **modem/RS-232 port for CP/M**, configured to a
@@ -77,7 +77,7 @@ selected by `$FCBC` (default `'B'`).
 
 * **`F` (format) and `W`/`MW` (write) are destructive** to bubble contents — `F`
   erases the whole device. For imaging, prefer the non-destructive `R` (read) or
-  the CP/M-level `BUDUMP` tool.
+  the CP/M-level `BUBDUMP` tool.
 * The monitor talks directly to the bubble controller, so it's the lowest-level
   way to read or write bubble records without CP/M — useful for recovery if the
   filesystem or boot image is damaged.

@@ -19,7 +19,7 @@ constant (see *CONFIGURATION*).
 
 **INFO** selects a drive, follows the BIOS Disk Parameter Header to its **DPB**,
 and prints the raw DPB fields together with a few handy derived values. It is the
-companion to `BUDUMP`: run it first to confirm a drive's geometry — in
+companion to `BUBDUMP`: run it first to confirm a drive's geometry — in
 particular how many sectors `BUBDUMP` will dump — before committing to a long
 serial transfer.
 

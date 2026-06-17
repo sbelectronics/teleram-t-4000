@@ -17,7 +17,7 @@ HEXRECV file.ext
 
 **HEXRECV** reads an Intel HEX stream from the **reader device** (`RDR:`),
 decodes it on the fly, and writes the resulting **binary** directly to the named
-CP/M file. It is the inverse of `BUDUMP`, and exists to bring binary files (e.g.
+CP/M file. It is the inverse of `BUBDUMP`, and exists to bring binary files (e.g.
 a `.COM`) onto the machine over a serial link where `PIP` can't: `PIP` stops at
 the first Ctrl-Z (`1Ah`), which binary files contain throughout.
 

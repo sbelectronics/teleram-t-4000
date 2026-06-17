@@ -1,4 +1,4 @@
-; BUBDUMP - dump CP/M drive (bubble) to PUN: as Intel HEX. ASM/LOAD to build.
+; BUBDUMP - dump CP/M drive (bubble) to LST: as Intel HEX. ASM/LOAD to build.
 BDOS    EQU     0005H
 WBOOTV  EQU     0001H
 CONOUT  EQU     2

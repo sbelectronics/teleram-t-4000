@@ -148,10 +148,9 @@ engine is at ROM `$07E5` (`A`=direction, `HL`=buffer, `DE`=record, `BC`=count),
 with single-bit ECC correction, 4× retry, and bad-page skip. So the lowest-level
 bubble access is firmware ROM code, reached by the BIOS via `out ($ff)`.
 
-## 6. Do the two bubbles combine into one drive? — YES (correction)
+## 6. Do the two bubbles combine into one drive? — yes
 
-**Earlier I concluded "individual drives." That was wrong; the deeper dig
-overturns it.** The evidence now points to **combination**:
+The evidence points to **combination**:
 
 * There are only **two** DPBs and they differ **only in capacity** (128 vs 256 KB)
   — i.e. *one bubble* vs *two bubbles* of the **same** drive, not two separate
@@ -238,12 +237,25 @@ Per the Teleram 3620 brochure (bitsavers: `pdf/teleram/brochures/Teleram3620Port
 **4000 whose resident BIOS has no floppy support at all* (above). So it is **not**
 established that the 3620/`RECOVER` is how the 4000 here got its bubble written —
 that would contradict the no-floppy finding. How a base 4000's bubble is
-(re)initialised is **an open question**: candidates are factory bubble
-programming, a recovery image in a battery-backed **RAM bank** (the monitor can
-boot/transfer RAM-bank images via `B:n`/`I`/`T`, see [MONITOR.md](MONITOR.md)),
-or floppy support added by *loadable* software on a floppy-equipped unit. The PROM
-monitor's `R`/`W`/`F` give the low-level read/write/format capability, but there
-is **no resident floppy driver and no serial bulk-load** in this firmware. The
+(re)initialised is **an open question**. Candidates, roughly by plausibility:
+
+1. **Over the teleCONNECT bus.** The brochure calls teleCONNECT *"a proprietary
+   2.5 MHz CPU bus"* — and 2.5 MHz is the Z80's clock, so it almost certainly
+   brings the **Z80 bus itself** out to the connector. A device on it could be a
+   **bus master** (`/BUSREQ`/`/BUSACK` DMA) and directly read/write the machine's
+   RAM and I/O — including the bubble controller (`$0C`/`$0D`) — with **no firmware
+   cooperation**, which is exactly why we find no teleCONNECT driver in the
+   ROM/BIOS. It may also map in via the bank latch (`$FF`) so a teleCONNECT device
+   appears as a bootable "bank" (cf. the boot ROM's `B:n`/`$5A`-bank probing). We
+   do **not** know its pinout or protocol — a real gap.
+2. **Factory bubble programming** (a development/programming rig).
+3. **A recovery image in a battery-backed RAM bank** (the monitor can
+   boot/transfer RAM-bank images via `B:n`/`I`/`T`, see [MONITOR.md](MONITOR.md)).
+4. **Loadable floppy software** on a floppy-equipped unit (the 3620 path) — but
+   that's the 3000/3100 mechanism and is not resident here.
+
+The PROM monitor's `R`/`W`/`F` give the low-level read/write/format capability, but
+there is **no resident floppy driver and no serial bulk-load** in this firmware. The
 `DC02`/`(DA5D)` gates in §5c show the disk code *can* branch away from the bubble
 path, but no second drive is configured in this image.
 

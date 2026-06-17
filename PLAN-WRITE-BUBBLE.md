@@ -25,13 +25,12 @@ needs no OS: on a non-bootable bubble the ROM's power-on path falls through to t
 monitor automatically (verified — every boot-failure exit jumps to the monitor's
 `$012E` handler).
 
-> **CORRECTION (this changes the plan):** the monitor's console is the machine's
-> **local keyboard + 80×8 LCD — NOT the serial port** (verified: `CONIN` scans the
-> keyboard matrix, `CONOUT` writes the LCD framebuffer; see
-> [docs/MONITOR.md](docs/MONITOR.md)). So you **cannot script the monitor from the
-> Pi** — monitor commands (`F`, `S`, `G`, …) must be typed **at the machine**. The
-> serial port is still used for the *bulk image transfer*, but only by the loader
-> once it is running — see §4.
+> **Important:** the monitor's console is the machine's **local keyboard + 80×8
+> LCD, not the serial port** (`CONIN` scans the keyboard matrix, `CONOUT` writes
+> the LCD framebuffer; see [docs/MONITOR.md](docs/MONITOR.md)). So you **cannot
+> script the monitor from the Pi** — monitor commands (`F`, `S`, `G`, …) must be
+> typed at the machine. The serial port is still used for the *bulk image
+> transfer*, but only by the loader once it is running — see §4.
 
 ## 3. What the monitor / ROM give us
 
@@ -65,7 +64,7 @@ monitor automatically (verified — every boot-failure exit jumps to the monitor
    directly readable as modem-RX outside CP/M (it doubles as the keyboard data
    port). **This is now the load-bearing unknown for the whole serial approach.**
 
-2. **Addressing/skew mismatch.** Our existing `bubble.bin` was dumped by `BUDUMP`
+2. **Addressing/skew mismatch.** Our existing `bubble.bin` was dumped by `BUBDUMP`
    at the **CP/M 128-byte sector level with SECTRAN skew** (through the BIOS). The
    monitor/ROM address the bubble at the **64-byte record level**. Writing
    `bubble.bin` straight to records 0..2047 will **not** necessarily round-trip.
@@ -144,7 +143,10 @@ per-record checksum) — the byte-exact, record-ordered source of truth.
   call to reuse; the loader must poll `$04`/`$14` directly at 1200 baud, and it's
   unconfirmed that `$14` is usable as modem-RX outside CP/M (it's also the keyboard
   data port). If this doesn't work, the serial-write approach is dead and the
-  realistic path is the teleCONNECT floppy (3000/3100) or factory/RAM-bank methods.
+  realistic paths are the **teleCONNECT bus** (a 2.5 MHz Z80-bus connector — a
+  bus-master device could DMA the image into RAM or drive the bubble controller
+  directly; protocol unknown), a battery-backed RAM-bank recovery image, or factory
+  programming. See [docs/BIOS.md](docs/BIOS.md) §7.
 - **Record-level addressing is the make-or-break item.** Validate the read↔write
   round-trip on a *non-destructive* test first: `BUBREAD` a few records, `BUBWRITE`
   them back to the *same* records on a scratch bubble, `BUBREAD` again, compare.
@@ -152,7 +154,7 @@ per-record checksum) — the byte-exact, record-ordered source of truth.
 - **Virgin-bubble bootloop init.** Confirm whether `F` (or `$09FA`/BMC cmd `$19`)
   fully initializes a never-formatted device, or whether a special bootloop-load
   step is required. A previously-formatted bubble is the low-risk first target.
-- **Skew/order of the image source.** `bubble.bin` (BUDUMP, sector-level) is *not*
+- **Skew/order of the image source.** `bubble.bin` (BUBDUMP, sector-level) is *not*
   directly the record image — capture `bubble.rec` with `BUBREAD` rather than
   reformatting `bubble.bin`, unless/until the sector↔record mapping is worked out.
 - **Clobbering monitor state** — keep the loader and buffer at `$2000`+, away from
