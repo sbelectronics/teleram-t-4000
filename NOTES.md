@@ -1,3 +1,5 @@
+Scott Baker, https://www.smbaker.com/
+
 ## Using the serial port
 
 Use TTALK speed command to set baud rate: "SP 9600"

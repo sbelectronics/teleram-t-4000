@@ -1,0 +1,24 @@
+# cpmtools diskdef for the Teleram T-4000 internal bubble memory image.
+#
+# Derived from bubble.bin (128 KB):
+#   total 1024 x 128-byte sectors; directory at sector 120 (0x3C00);
+#   1 KB blocks (113 data blocks, DSM=112); 64 directory entries.
+#
+# The image was dumped by BUBDUMP in CP/M *logical* sector order (it used the
+# BIOS SECTRAN skew table while reading), so it is already de-skewed:
+# use "skew 1" (identity) here.
+#
+# Note: with skew 1, the exact tracks/sectrk split is cosmetic for cpmtools as
+# long as sectrk*tracks = 1024 and boottrk*sectrk = 120 (the reserved offset).
+# Adjust sectrk/tracks/boottrk to mirror what INFO reports if you like.
+
+diskdef teleram
+  seclen 128
+  sectrk 8
+  tracks 128
+  blocksize 1024
+  maxdir 64
+  boottrk 15
+  skew 1
+  os 2.2
+end

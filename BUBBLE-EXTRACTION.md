@@ -1,5 +1,7 @@
 # Teleram T-4000 Bubble Memory Extraction
 
+Scott Baker, https://www.smbaker.com/
+
 How the internal bubble memory of a Teleram T-4000 (CP/M 2.2) was dumped to a
 host computer and reconstructed into a raw binary image, and how to reproduce
 it.
