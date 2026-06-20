@@ -20,19 +20,22 @@ machine's hardware and programs, and a set of host-side and on-machine tools.
 - [docs/MONITOR.md](docs/MONITOR.md) — the PROM monitor: how to enter it and its commands.
 
 ### Commands (CP/M programs on the machine)
-Documented so far — only `ASSIGN` and `TTALK` have been reverse-engineered:
+Documented so far — `ASSIGN`, `TTALK`, `DEFAULT`, `KEYDEF`, and `LDTAB` have been reverse-engineered:
 
 | Command | What it does | Documentation |
 |---------|--------------|---------------|
 | `ASSIGN` | Teleram device-routing utility (routes CP/M logical devices to physical ones) | [docs/ASSIGN.md](docs/ASSIGN.md) |
 | `TTALK`  | teleTALK — Crosstalk-derived comms terminal + file transfer | [docs/TTALK.md](docs/TTALK.md) |
+| `DEFAULT` | set system default UART line params, IOBYTE device assignments, and keyboard repeat | [docs/DEFAULT.md](docs/DEFAULT.md) |
+| `KEYDEF` | define the keyboard's function-key / macro strings | [docs/KEYDEF.md](docs/KEYDEF.md) |
+| `LDTAB`  | load a keyboard translation table from a file into the firmware | [docs/LDTAB.md](docs/LDTAB.md) |
 
 The `TTALK` file-transfer wire protocol is documented separately:
 - [docs/TTALK-PROTOCOL.md](docs/TTALK-PROTOCOL.md) — the reverse-engineered teleTALK/Crosstalk
   protocol (framing, CRC, handshake), used by the host tools below.
 
 > The bubble also carries the usual CP/M utilities (`ASM`, `DDT`, `DUMP`, `ED`, `LOAD`, `PIP`,
-> `STAT`, `SUBMIT`, `XSUB`) and Teleram extras (`KEYDEF`, …) that are **not yet documented here**.
+> `STAT`, `SUBMIT`, `XSUB`) that are **not yet documented here**.
 
 ### Tools we built
 On-machine (8080 asm, assemble with the stock `ASM`/`LOAD`):
